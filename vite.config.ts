@@ -11,11 +11,7 @@ export default defineConfig(({ mode }) => ({
    
   },
   build: {
-<<<<<<< HEAD
     outDir: "dist", // production output folder
-=======
-    outDir: "dist",
->>>>>>> 971db2a (Fix Vite build output directory and add vite.config.js)
   },
   plugins: [
     react(),
