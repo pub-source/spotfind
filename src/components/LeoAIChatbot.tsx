@@ -70,29 +70,31 @@ export function LeoAIChatbot() {
         messageContent += " [User attached an image]";
       }
 
-      // Use OpenRouter API with DeepSeek model
-      const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Authorization': 'Bearer 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',
-          'HTTP-Referer': window.location.origin,
-          'X-Title': 'Leo Travel Assistant',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          "model": "deepseek/deepseek-chat-v3.1:free",
-          "messages": [
-            {
-              "role": "system",
-              "content": "You are Leo, an AI travel assistant specialized in providing information about tourist spots, accommodations, and travel tips for Cabuyao, Laguna. Be friendly, helpful, and provide detailed recommendations."
-            },
-            {
-              "role": "user",
-              "content": messageContent
-            }
-          ]
-        })
-      });
+      // Example: Hardcoded API key (⚠️ not safe for production!)
+const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+  method: "POST",
+  headers: {
+    "Authorization": "Bearer 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",
+    "HTTP-Referer": window.location.origin,
+    "X-Title": "Leo Travel Assistant",
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    model: "deepseek/deepseek-r1:free",   // ✅ fixed model name
+    messages: [
+      {
+        role: "system",
+        content: "You are Leo, an AI travel assistant specialized in providing information about tourist spots, accommodations, and travel tips for Cabuyao, Laguna. Be friendly, helpful, and provide detailed recommendations."
+      },
+      {
+        role: "user",
+        content: messageContent
+      }
+    ]
+  })
+});
+
+
 
       if (!response.ok) {
         const errorData = await response.json();
