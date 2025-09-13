@@ -74,13 +74,13 @@ export function LeoAIChatbot() {
 const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
   method: "POST",
   headers: {
-    "Authorization": "Bearer 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",
+    "Authorization": `Bearer ${import.meta.env.VITE_OPENROUTER_API_KEY}`,
     "HTTP-Referer": window.location.origin,
     "X-Title": "Leo Travel Assistant",
     "Content-Type": "application/json"
   },
   body: JSON.stringify({
-    model: "deepseek/deepseek-r1:free",   // ✅ fixed model name
+    model: "deepseek/deepseek-r1:free",
     messages: [
       {
         role: "system",
@@ -93,6 +93,7 @@ const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
     ]
   })
 });
+
 
 
 
