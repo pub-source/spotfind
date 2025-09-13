@@ -90,7 +90,8 @@ export function TravelLayout({ children }: TravelLayoutProps) {
             <div className="flex items-center gap-2">
               <Compass className="h-8 w-8 text-primary" />
               <span className="font-bold text-lg bg-gradient-hero bg-clip-text text-transparent">
-                Tourist Spots Finder
+                Tourist Spot Finder
+                <span className="text-sm block">Cabuyao, Laguna</span> 
               </span>
             </div>
             <Button
@@ -160,7 +161,7 @@ export function TravelLayout({ children }: TravelLayoutProps) {
               <Compass className="h-8 w-8 text-primary" />
               <span className="font-bold text-lg bg-gradient-hero bg-clip-text text-transparent">
                 Tourist Spot Finder
-                <span className="text-sm block">Cabuyao, Laguna</span>
+                <span className="text-sm block">Cabuyao, Laguna</span>  
               </span>
             </div>
           </div>
@@ -227,7 +228,8 @@ export function TravelLayout({ children }: TravelLayoutProps) {
           <div className="flex items-center gap-2">
             <Compass className="h-6 w-6 text-primary" />
             <span className="font-bold bg-gradient-hero bg-clip-text text-transparent">
-              Tourist Finder
+              Tourist Spot Finder
+                <span className="text-sm block">Cabuyao, Laguna</span> 
             </span>
           </div>
         </div>
