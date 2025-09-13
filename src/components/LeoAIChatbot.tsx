@@ -71,7 +71,7 @@ export function LeoAIChatbot() {
       }
 
       // Example: Hardcoded API key (⚠️ not safe for production!)
-const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+      const response = await fetch("https://api.chatanywhere.tech/v1/chat/completions", {
   method: "POST",
   headers: {
     "Authorization": `Bearer ${import.meta.env.VITE_OPENROUTER_API_KEY}`,
@@ -80,7 +80,7 @@ const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
     "Content-Type": "application/json"
   },
   body: JSON.stringify({
-    model: "deepseek/deepseek-r1:free",
+    model: "gpt-4o-mini",
     messages: [
       {
         role: "system",
