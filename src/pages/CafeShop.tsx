@@ -1,16 +1,24 @@
-import { useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { MapPin, Clock, DollarSign, Star, Coffee, Wifi, Car } from "lucide-react";
+"use client"
+
+import { useState } from "react"
+import { Card, CardContent } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Badge } from "@/components/ui/badge"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useLocation } from "@/hooks/useLocation"
+import { useToast } from "@/hooks/use-toast"
+import { MapPin, Clock, DollarSign, Star, Coffee, Navigation, ExternalLink, Loader2 } from "lucide-react"
 
 export default function CafeShop() {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedFilter, setSelectedFilter] = useState("all");
-  const [distanceFilter, setDistanceFilter] = useState("all");
-  const [priceRange, setPriceRange] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("")
+  const [selectedFilter, setSelectedFilter] = useState("all")
+  const [distanceFilter, setDistanceFilter] = useState("all")
+  const [priceRange, setPriceRange] = useState("all")
+  const [directionsLoading, setDirectionsLoading] = useState<number | null>(null)
+
+  const { getCurrentLocation, openGoogleMaps, loading, error } = useLocation()
+  const { toast } = useToast()
 
   const cafes = [
     {
@@ -25,7 +33,10 @@ export default function CafeShop() {
       openHours: "6:00 AM - 10:00 PM",
       amenities: ["Free WiFi", "Parking", "AC", "Pet Friendly"],
       category: "coffee",
-      priceLevel: "medium"
+      priceLevel: "medium",
+      coordinates: { lat: 14.5547, lng: 121.0244 },
+      website: "https://thecoffeebean.com.ph",
+      shopUrl: "https://thecoffeebean.com.ph/locations/poblacion",
     },
     {
       id: 2,
@@ -39,7 +50,10 @@ export default function CafeShop() {
       openHours: "7:00 AM - 9:00 PM",
       amenities: ["Free WiFi", "AC", "Takeout"],
       category: "bakery",
-      priceLevel: "low"
+      priceLevel: "low",
+      coordinates: { lat: 14.5515, lng: 121.0473 },
+      website: "https://brewandbites.ph",
+      shopUrl: "https://brewandbites.ph/bgc-branch",
     },
     {
       id: 3,
@@ -53,7 +67,10 @@ export default function CafeShop() {
       openHours: "10:00 AM - 12:00 AM",
       amenities: ["Free WiFi", "Rooftop", "Bar", "Events"],
       category: "restaurant",
-      priceLevel: "high"
+      priceLevel: "high",
+      coordinates: { lat: 14.5866, lng: 121.0611 },
+      website: "https://rooftopcafe.ph",
+      shopUrl: "https://rooftopcafe.ph/ortigas",
     },
     {
       id: 4,
@@ -67,27 +84,73 @@ export default function CafeShop() {
       openHours: "6:30 AM - 8:00 PM",
       amenities: ["Free WiFi", "Organic", "Study Area"],
       category: "coffee",
-      priceLevel: "medium"
-    }
-  ];
+      priceLevel: "medium",
+      coordinates: { lat: 14.676, lng: 121.0437 },
+      website: "https://localgrind.ph",
+      shopUrl: "https://localgrind.ph/qc-branch",
+    },
+  ]
 
-  const filteredCafes = cafes.filter(cafe => {
-    const matchesSearch = cafe.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         cafe.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedFilter === "all" || cafe.category === selectedFilter;
-    const matchesDistance = distanceFilter === "all" || 
-      (distanceFilter === "5km" && parseFloat(cafe.distance) <= 5) ||
-      (distanceFilter === "10km" && parseFloat(cafe.distance) <= 10);
-    const matchesPrice = priceRange === "all" || cafe.priceLevel === priceRange;
-    
-    return matchesSearch && matchesCategory && matchesDistance && matchesPrice;
-  });
+  const filteredCafes = cafes.filter((cafe) => {
+    const matchesSearch =
+      cafe.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      cafe.description.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesCategory = selectedFilter === "all" || cafe.category === selectedFilter
+    const matchesDistance =
+      distanceFilter === "all" ||
+      (distanceFilter === "5km" && Number.parseFloat(cafe.distance) <= 5) ||
+      (distanceFilter === "10km" && Number.parseFloat(cafe.distance) <= 10)
+    const matchesPrice = priceRange === "all" || cafe.priceLevel === priceRange
+
+    return matchesSearch && matchesCategory && matchesDistance && matchesPrice
+  })
 
   const getRatingColor = (rating: number) => {
-    if (rating >= 4.5) return "text-green-600";
-    if (rating >= 4.0) return "text-yellow-600";
-    return "text-orange-600";
-  };
+    if (rating >= 4.5) return "text-green-600"
+    if (rating >= 4.0) return "text-yellow-600"
+    return "text-orange-600"
+  }
+
+  const handleDirections = async (cafe: any) => {
+    setDirectionsLoading(cafe.id)
+    try {
+      await getCurrentLocation()
+      openGoogleMaps(cafe.coordinates.lat, cafe.coordinates.lng, cafe.name)
+      toast({
+        title: "Opening directions",
+        description: `Getting route to ${cafe.name}`,
+      })
+    } catch (error) {
+      toast({
+        title: "Location access required",
+        description: "Please allow location access to get accurate directions",
+        variant: "destructive",
+      })
+    } finally {
+      setDirectionsLoading(null)
+    }
+  }
+
+  const handleViewDetails = (cafe: any) => {
+    if (cafe.shopUrl) {
+      window.open(cafe.shopUrl, "_blank")
+      toast({
+        title: "Opening shop page",
+        description: `Viewing details for ${cafe.name}`,
+      })
+    } else if (cafe.website) {
+      window.open(cafe.website, "_blank")
+      toast({
+        title: "Opening website",
+        description: `Viewing ${cafe.name} website`,
+      })
+    } else {
+      toast({
+        title: "Shop details",
+        description: "Contact the shop directly for more information",
+      })
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gradient-subtle">
@@ -176,37 +239,37 @@ export default function CafeShop() {
         {/* Cafe Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredCafes.map((cafe, index) => (
-            <Card key={cafe.id} className="overflow-hidden hover:shadow-travel transition-all duration-300 hover:-translate-y-1 group animate-fade-in" style={{animationDelay: `${index * 100}ms`}}>
+            <Card
+              key={cafe.id}
+              className="overflow-hidden hover:shadow-travel transition-all duration-300 hover:-translate-y-1 group animate-fade-in"
+              style={{ animationDelay: `${index * 100}ms` }}
+            >
               <div className="relative overflow-hidden">
                 <img
-                  src={cafe.image}
+                  src={cafe.image || "/placeholder.svg"}
                   alt={cafe.name}
                   className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </div>
-              
+
               <CardContent className="p-6">
                 <div className="flex items-start justify-between mb-2">
-                  <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">
-                    {cafe.name}
-                  </h3>
+                  <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">{cafe.name}</h3>
                   <div className="flex items-center gap-1">
                     <Star className={`h-4 w-4 ${getRatingColor(cafe.rating)} fill-current`} />
-                    <span className={`text-sm font-medium ${getRatingColor(cafe.rating)}`}>
-                      {cafe.rating}
-                    </span>
+                    <span className={`text-sm font-medium ${getRatingColor(cafe.rating)}`}>{cafe.rating}</span>
                   </div>
                 </div>
 
-                <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
-                  {cafe.description}
-                </p>
+                <p className="text-muted-foreground text-sm mb-4 line-clamp-2">{cafe.description}</p>
 
                 <div className="space-y-3">
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <MapPin className="h-4 w-4" />
-                    <span>{cafe.location} • {cafe.distance}</span>
+                    <span>
+                      {cafe.location} • {cafe.distance}
+                    </span>
                   </div>
 
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -229,10 +292,21 @@ export default function CafeShop() {
                 </div>
 
                 <div className="flex gap-2 mt-4">
-                  <Button className="flex-1 hover:shadow-glow transition-all">
+                  <Button className="flex-1 hover:shadow-glow transition-all" onClick={() => handleViewDetails(cafe)}>
+                    <ExternalLink className="h-4 w-4 mr-1" />
                     View Details
                   </Button>
-                  <Button variant="outline" className="flex-1 hover:bg-primary hover:text-primary-foreground transition-all">
+                  <Button
+                    variant="outline"
+                    className="flex-1 hover:bg-primary hover:text-primary-foreground transition-all bg-transparent"
+                    onClick={() => handleDirections(cafe)}
+                    disabled={directionsLoading === cafe.id || loading}
+                  >
+                    {directionsLoading === cafe.id || loading ? (
+                      <Loader2 className="h-4 w-4 animate-spin mr-1" />
+                    ) : (
+                      <Navigation className="h-4 w-4 mr-1" />
+                    )}
                     Directions
                   </Button>
                 </div>
@@ -250,5 +324,5 @@ export default function CafeShop() {
         )}
       </div>
     </div>
-  );
+  )
 }

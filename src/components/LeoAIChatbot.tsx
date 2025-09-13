@@ -76,7 +76,7 @@ export function LeoAIChatbot() {
   headers: {
     "Authorization": `Bearer ${import.meta.env.VITE_OPENROUTER_API_KEY}`,
     "HTTP-Referer": window.location.origin,
-    "X-Title": "Leo Travel Assistant",
+    "X-Title": "Lakbay Travel Assistant",
     "Content-Type": "application/json"
   },
   body: JSON.stringify({
@@ -230,14 +230,14 @@ export function LeoAIChatbot() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Bot className="h-5 w-5 text-primary" />
-          Leo AI Travel Assistant
+          Lakbay AI Travel Assistant
         </CardTitle>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <p className="text-muted-foreground">
-              Ask Leo anything about tourist spots, accommodations, or travel tips in Cabuyao, Laguna!
+              Ask Lakbay anything about tourist spots, accommodations, or travel tips in Cabuyao, Laguna!
             </p>
             {isGuest && (
               <div className="flex items-center gap-1 text-xs text-yellow-600 bg-yellow-50 dark:bg-yellow-900/20 dark:text-yellow-400 px-2 py-1 rounded-full">
@@ -341,7 +341,7 @@ export function LeoAIChatbot() {
               <Camera className="h-4 w-4" />
             </Button>
             <Input
-              placeholder={isGuest ? "Sign in to chat with Leo..." : "Ask Leo about travel recommendations..."}
+              placeholder={isGuest ? "Sign in to chat with Lakbay..." : "Ask Lakbay about travel recommendations..."}
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyPress={handleKeyPress}
