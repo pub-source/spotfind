@@ -12,8 +12,10 @@ import CafeShop from "./pages/CafeShop";
 import Gallery from "./pages/Gallery";
 import TransportGuide from "./pages/TransportGuide";
 import Admin from "./pages/Admin";
-import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
+
+// ✅ Import Login wrapper (with LoginForm + SignUpForm toggle)
+import Login from "./pages/Login";
 
 const queryClient = new QueryClient();
 
@@ -25,22 +27,27 @@ const App = () => (
       <BrowserRouter>
         <AuthProvider>
           <Routes>
+            {/* 🔑 Standalone login/signup page */}
             <Route path="/login" element={<Login />} />
-            <Route path="/*" element={
-              <TravelLayout>
-                <Routes>
-                  <Route path="/" element={<Dashboard />} />
-                  <Route path="/spots" element={<TouristSpots />} />
-                  <Route path="/accommodations" element={<Accommodations />} />
-                  <Route path="/cafe" element={<CafeShop />} />
-                  <Route path="/gallery" element={<Gallery />} />
-                  <Route path="/transport" element={<TransportGuide />} />
-                  <Route path="/admin" element={<Admin />} />
-                  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </TravelLayout>
-            } />
+
+            {/* 🔑 Main layout and all other routes */}
+            <Route
+              path="/*"
+              element={
+                <TravelLayout>
+                  <Routes>
+                    <Route path="/" element={<Dashboard />} />
+                    <Route path="/spots" element={<TouristSpots />} />
+                    <Route path="/accommodations" element={<Accommodations />} />
+                    <Route path="/cafe" element={<CafeShop />} />
+                    <Route path="/gallery" element={<Gallery />} />
+                    <Route path="/transport" element={<TransportGuide />} />
+                    <Route path="/admin" element={<Admin />} />
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </TravelLayout>
+              }
+            />
           </Routes>
         </AuthProvider>
       </BrowserRouter>
