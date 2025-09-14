@@ -9,20 +9,20 @@ import { useAuth } from '@/contexts/AuthContext';
 interface Message {
   id: string;
   content: string;
-  sender: 'user' | 'Lakbay';
+  sender: 'user' | 'leo';
   timestamp: Date;
   imageUrl?: string;
 }
 
-export function LakbayAIChatbot() {
+export function LeoAIChatbot() {
   const { isGuest } = useAuth();
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
       content: isGuest 
-        ? 'Hello! I\'m Lakbay, your AI travel assistant. To use the AI chat feature, please sign in for full access to personalized travel recommendations!'
-        : 'Hello! I\'m Lakbay, your AI travel assistant. I can help you discover tourist spots, accommodations, and provide travel tips for Cabuyao, Laguna. What would you like to know?',
-      sender: 'Lakbay',
+        ? 'Hello! I\'m Leo, your AI travel assistant. To use the AI chat feature, please sign in for full access to personalized travel recommendations!'
+        : 'Hello! I\'m Leo, your AI travel assistant. I can help you discover tourist spots, accommodations, and provide travel tips for Cabuyao, Laguna. What would you like to know?',
+      sender: 'leo',
       timestamp: new Date()
     }
   ]);
@@ -39,8 +39,8 @@ export function LakbayAIChatbot() {
     if (isGuest) {
       const blockedMessage: Message = {
         id: (Date.now() + 1).toString(),
-        content: 'AI chat is only available for registered users. Please sign in to access personalized travel recommendations and chat with Lakbay.',
-        sender: 'Lakbay',
+        content: 'AI chat is only available for registered users. Please sign in to access personalized travel recommendations and chat with Leo.',
+        sender: 'leo',
         timestamp: new Date()
       };
       setMessages(prev => [...prev, blockedMessage]);
@@ -84,7 +84,7 @@ export function LakbayAIChatbot() {
     messages: [
       {
         role: "system",
-        content: "You are Lakbay, an AI travel assistant specialized in providing information about tourist spots, accommodations, and travel tips for Cabuyao, Laguna. Be friendly, helpful, and provide detailed recommendations."
+        content: "You are Leo, an AI travel assistant specialized in providing information about tourist spots, accommodations, and travel tips for Cabuyao, Laguna. Be friendly, helpful, and provide detailed recommendations."
       },
       {
         role: "user",
@@ -103,20 +103,20 @@ export function LakbayAIChatbot() {
       }
 
       const data = await response.json();
-      const LakbayResponse: Message = {
+      const leoResponse: Message = {
         id: (Date.now() + 1).toString(),
         content: data.choices[0]?.message?.content || 'Sorry, I could not generate a response.',
-        sender: 'Lakbay',
+        sender: 'leo',
         timestamp: new Date()
       };
       
-      setMessages(prev => [...prev, LakbayResponse]);
+      setMessages(prev => [...prev, leoResponse]);
     } catch (error) {
       console.error('Error calling AI API:', error);
       const errorResponse: Message = {
         id: (Date.now() + 1).toString(),
         content: 'Sorry, I\'m having trouble connecting right now. Please try again later.',
-        sender: 'Lakbay',
+        sender: 'leo',
         timestamp: new Date()
       };
       setMessages(prev => [...prev, errorResponse]);
@@ -150,7 +150,7 @@ export function LakbayAIChatbot() {
       const blockedMessage: Message = {
         id: (Date.now() + 1).toString(),
         content: 'Location services are only available for registered users. Please sign in to access this feature.',
-        sender: 'Lakbay',
+        sender: 'leo',
         timestamp: new Date()
       };
       setMessages(prev => [...prev, blockedMessage]);
@@ -161,7 +161,7 @@ export function LakbayAIChatbot() {
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         content: 'Geolocation is not supported by your browser.',
-        sender: 'Lakbay',
+        sender: 'leo',
         timestamp: new Date()
       };
       setMessages(prev => [...prev, errorMessage]);
@@ -185,7 +185,7 @@ export function LakbayAIChatbot() {
           const locationMessage: Message = {
             id: Date.now().toString(),
             content: `I see you're at ${locationName}. How can I help you with travel recommendations in this area?`,
-            sender: 'Lakbay',
+            sender: 'leo',
             timestamp: new Date()
           };
           
@@ -195,7 +195,7 @@ export function LakbayAIChatbot() {
           const locationMessage: Message = {
             id: Date.now().toString(),
             content: `I've detected your location (Lat: ${latitude.toFixed(4)}, Lng: ${longitude.toFixed(4)}). How can I help you with travel recommendations in this area?`,
-            sender: 'Lakbay',
+            sender: 'leo',
             timestamp: new Date()
           };
           
@@ -209,7 +209,7 @@ export function LakbayAIChatbot() {
         const errorMessage: Message = {
           id: (Date.now() + 1).toString(),
           content: 'Unable to access your location. Please make sure location services are enabled.',
-          sender: 'Lakbay',
+          sender: 'leo',
           timestamp: new Date()
         };
         setMessages(prev => [...prev, errorMessage]);
@@ -255,7 +255,7 @@ export function LakbayAIChatbot() {
                   key={message.id}
                   className={`flex gap-3 ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
-                  {message.sender === 'Lakbay' && (
+                  {message.sender === 'leo' && (
                     <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
                       <Bot className="h-4 w-4 text-primary" />
                     </div>
