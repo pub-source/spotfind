@@ -20,8 +20,8 @@ export function LeoAIChatbot() {
     {
       id: '1',
       content: isGuest 
-        ? 'Hello! I\'m Leo, your AI travel assistant. To use the AI chat feature, please sign in for full access to personalized travel recommendations!'
-        : 'Hello! I\'m Leo, your AI travel assistant. I can help you discover tourist spots, accommodations, and provide travel tips for Cabuyao, Laguna. What would you like to know?',
+        ? 'Hello! I\'m Lakbay, your AI travel assistant. To use the AI chat feature, please sign in for full access to personalized travel recommendations!'
+        : 'Hello! I\'m Lakbay, your AI travel assistant. I can help you discover tourist spots, accommodations, and provide travel tips for Cabuyao, Laguna. What would you like to know?',
       sender: 'leo',
       timestamp: new Date()
     }
