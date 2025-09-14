@@ -84,7 +84,7 @@ export function LeoAIChatbot() {
     messages: [
       {
         role: "system",
-        content: "You are Leo, an AI travel assistant specialized in providing information about tourist spots, accommodations, and travel tips for Cabuyao, Laguna. Be friendly, helpful, and provide detailed recommendations."
+        content: "You are Lakbay, an AI travel assistant specialized in providing information about tourist spots, accommodations, and travel tips for Cabuyao, Laguna. Be friendly, helpful, and provide detailed recommendations."
       },
       {
         role: "user",
